@@ -143,16 +143,16 @@ typedef void (^TBBlurEffectBlock)(void);
         _message = message;
         _delegate = delegate;
         
-        if (destructiveButtonTitle) {
-            _destructiveButtonIndex = [self addButtonWithTitle:destructiveButtonTitle style:TBActionButtonStyleDestructive];
-        }
-        
         if (firstOtherButtonTitle) {// 第一个参数 firstOtherButtonTitle 是不属于参数列表的,
             [self addButtonWithTitle:firstOtherButtonTitle style:TBActionButtonStyleDefault];
             NSString* eachArg;
             while ((eachArg = va_arg(argList, NSString*))) {// 从 args 中遍历出参数，NSString* 指明类型
                 [self addButtonWithTitle:eachArg style:TBActionButtonStyleDefault];
             }
+        }
+        
+        if (destructiveButtonTitle) {
+            _destructiveButtonIndex = [self addButtonWithTitle:destructiveButtonTitle style:TBActionButtonStyleDestructive];
         }
         
         if (cancelButtonTitle) {
