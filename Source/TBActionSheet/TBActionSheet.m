@@ -162,6 +162,29 @@ typedef void (^TBBlurEffectBlock)(void);
     return self;
 }
 
+- (instancetype)initWithTitle:(NSString *)title message:(NSString *)message delegate:(id<TBActionSheetDelegate>)delegate cancelButtonTitle:(NSString *)cancelButtonTitle destructiveButtonTitle:(NSString *)destructiveButtonTitle otherButtons:(NSArray<NSString *> *)otherButtons
+{
+    self = [self init];
+    if (self) {
+        _title = title;
+        _message = message;
+        _delegate = delegate;
+        
+        for (NSString *otherButton in otherButtons) {
+            [self addButtonWithTitle:otherButton style:TBActionButtonStyleDefault];
+        }
+        
+        if (destructiveButtonTitle) {
+            _destructiveButtonIndex = [self addButtonWithTitle:destructiveButtonTitle style:TBActionButtonStyleDestructive];
+        }
+        
+        if (cancelButtonTitle) {
+            _cancelButtonIndex = [self addButtonWithTitle:cancelButtonTitle style:TBActionButtonStyleCancel];
+        }
+    }
+    return self;
+}
+
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
