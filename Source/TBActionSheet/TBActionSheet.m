@@ -162,24 +162,30 @@ typedef void (^TBBlurEffectBlock)(void);
     return self;
 }
 
-- (instancetype)initWithTitle:(NSString *)title message:(NSString *)message delegate:(id<TBActionSheetDelegate>)delegate cancelButtonTitle:(NSString *)cancelButtonTitle destructiveButtonTitle:(NSString *)destructiveButtonTitle otherButtons:(NSArray<NSString *> *)otherButtons
+- (instancetype)initWithTitle:(NSString *)title message:(NSString *)message cancelButtonTitle:(NSString *)cancelButtonTitle destructiveButtonTitle:(NSString *)destructiveButtonTitle otherButtons:(NSArray<NSString *> *)otherButtons buttonHandler:(nullable void (^)(ButtonType buttonType, NSInteger buttonIndex))buttonHandler
 {
     self = [self init];
     if (self) {
         _title = title;
         _message = message;
-        _delegate = delegate;
         
-        for (NSString *otherButton in otherButtons) {
-            [self addButtonWithTitle:otherButton style:TBActionButtonStyleDefault];
+        for (NSInteger i = 0; i < otherButtons.count; i++) {
+            NSString *otherButton = [otherButtons objectAtIndex:i];
+            [self addButtonWithTitle:otherButton style:TBActionButtonStyleDefault handler:^(TBActionButton * _Nonnull button) {
+                buttonHandler(ButtonType_Default, i);
+            }];
         }
         
         if (destructiveButtonTitle) {
-            _destructiveButtonIndex = [self addButtonWithTitle:destructiveButtonTitle style:TBActionButtonStyleDestructive];
+            _destructiveButtonIndex = [self addButtonWithTitle:destructiveButtonTitle style:TBActionButtonStyleDestructive handler:^(TBActionButton * _Nonnull button) {
+                buttonHandler(ButtonType_Destructive, 0);
+            }];
         }
         
         if (cancelButtonTitle) {
-            _cancelButtonIndex = [self addButtonWithTitle:cancelButtonTitle style:TBActionButtonStyleCancel];
+            _cancelButtonIndex = [self addButtonWithTitle:cancelButtonTitle style:TBActionButtonStyleCancel handler:^(TBActionButton * _Nonnull button) {
+                buttonHandler(ButtonType_Cancel, 0);
+            }];
         }
     }
     return self;
