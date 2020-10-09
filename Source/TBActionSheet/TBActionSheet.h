@@ -13,6 +13,12 @@ NS_ASSUME_NONNULL_BEGIN
 @class TBActionContainer;
 @protocol TBActionSheetDelegate;
 
+typedef NS_ENUM(NSInteger, ButtonType) {
+    ButtonType_Default,
+    ButtonType_Cancel,
+    ButtonType_Destructive
+};
+
 @interface TBActionSheet : UIView
 
 @property (nullable, nonatomic, weak) id<TBActionSheetDelegate> delegate;
@@ -25,7 +31,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (instancetype)initWithTitle:(nullable NSString *)title delegate:(nullable id <TBActionSheetDelegate>)delegate cancelButtonTitle:(nullable NSString *)cancelButtonTitle destructiveButtonTitle:(nullable NSString *)destructiveButtonTitle otherButtonTitles:(nullable NSString *)otherButtonTitles, ... NS_REQUIRES_NIL_TERMINATION;
 - (instancetype)initWithTitle:(nullable NSString *)title message:(nullable NSString *)message delegate:(nullable id <TBActionSheetDelegate>)delegate cancelButtonTitle:(nullable NSString *)cancelButtonTitle destructiveButtonTitle:(nullable NSString *)destructiveButtonTitle otherButtonTitles:(nullable NSString *)otherButtonTitles, ... NS_REQUIRES_NIL_TERMINATION;
-- (instancetype)initWithTitle:(NSString *)title message:(NSString *)message delegate:(id<TBActionSheetDelegate>)delegate cancelButtonTitle:(NSString *)cancelButtonTitle destructiveButtonTitle:(NSString *)destructiveButtonTitle otherButtons:(NSArray<NSString *> *)otherButtons;
+- (instancetype)initWithTitle:(NSString *)title message:(NSString *)message cancelButtonTitle:(NSString *)cancelButtonTitle destructiveButtonTitle:(NSString *)destructiveButtonTitle otherButtons:(NSArray<NSString *> *)otherButtons buttonHandler:(nullable void (^)(ButtonType buttonType, NSInteger buttonIndex))buttonHandler;
 - (instancetype)initWithFrame:(CGRect)frame NS_UNAVAILABLE;
 
 // adds a button with the title. returns the index (0 based) of where it was added. buttons are displayed in the order added except for the
